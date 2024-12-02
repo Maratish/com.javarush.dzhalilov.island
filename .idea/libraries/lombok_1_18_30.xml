@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="lombok-1.18.30">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../lombok-1.18.30.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../snakeyaml-2.2-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
