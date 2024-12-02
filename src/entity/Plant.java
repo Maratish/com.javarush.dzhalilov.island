@@ -1,4 +1,4 @@
 package entity;
 
-public class Plant {
+public class Plant  {
 }
