@@ -1,0 +1,89 @@
+wolf:
+  weight: 50.0
+  max_per_cell: 30
+  max_speed: 3
+  food_needed_for_max_satiety: 8.0
+
+boa:
+  weight: 15.0
+  max_per_cell: 30
+  max_speed: 1
+  food_needed_for_max_satiety: 3.0
+
+fox:
+  weight: 8.0
+  max_per_cell: 30
+  max_speed: 2
+  food_needed_for_max_satiety: 2.0
+
+bear:
+  weight: 500.0
+  max_per_cell: 5
+  max_speed: 2
+  food_needed_for_max_satiety: 80.0
+
+eagle:
+  weight: 6.0
+  max_per_cell: 20
+  max_speed: 3
+  food_needed_for_max_satiety: 1.0
+
+horse:
+  weight: 400.0
+  max_per_cell: 20
+  max_speed: 4
+  food_needed_for_max_satiety: 60.0
+
+deer:
+  weight: 300.0
+  max_per_cell: 20
+  max_speed: 4
+  food_needed_for_max_satiety: 50.0
+
+rabbit:
+  weight: 2.0
+  max_per_cell: 150
+  max_speed: 2
+  food_needed_for_max_satiety: 0.45
+
+mouse:
+  weight: 0.05
+  max_per_cell: 500
+  max_speed: 1
+  food_needed_for_max_satiety: 0.01
+
+goat:
+  weight: 60.0
+  max_per_cell: 140
+  max_speed: 3
+  food_needed_for_max_satiety: 10.0
+
+sheep:
+  weight: 70.0
+  max_per_cell: 140
+  max_speed: 3
+  food_needed_for_max_satiety: 15.0
+
+boar:
+  weight: 400.0
+  max_per_cell: 50
+  max_speed: 2
+  food_needed_for_max_satiety: 50.0
+
+buffalo:
+  weight: 700.0
+  max_per_cell: 10
+  max_speed: 3
+  food_needed_for_max_satiety: 100.0
+
+duck:
+  weight: 1.0
+  max_per_cell: 200
+  max_speed: 4
+  food_needed_for_max_satiety: 0.15
+
+caterpillar:
+  weight: 0.01
+  max_per_cell: 1000
+  max_speed: 0
+  food_needed_for_max_satiety: 0.0
