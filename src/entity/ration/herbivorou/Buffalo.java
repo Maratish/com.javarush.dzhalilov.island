@@ -1,10 +1,12 @@
 package entity.ration.herbivorou;
 
-import entity.Herbivorous;
+import setting.PredatorPreyProbability;
+
+import java.util.Map;
 
 
 public class Buffalo extends Herbivorous {
-    public Buffalo(double weight, int maxSpeed, double maxPerCell, double maxSatiety, double foodNeeded){
-        super(weight, maxSpeed, maxPerCell, maxSatiety, foodNeeded);
+    public Buffalo(Map<String,Object> animalChar){
+        super(animalChar);
     }
 }

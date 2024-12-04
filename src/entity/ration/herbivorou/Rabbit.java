@@ -1,10 +1,10 @@
 package entity.ration.herbivorou;
 
-import entity.Herbivorous;
+import java.util.Map;
 
 
 public class Rabbit extends Herbivorous {
-    public Rabbit(double weight, int maxSpeed, double maxPerCell, double maxSatiety, double foodNeeded){
-        super(weight, maxSpeed, maxPerCell, maxSatiety, foodNeeded);
+    public Rabbit(Map<String,Object> animalChar){
+        super(animalChar);
     }
 }

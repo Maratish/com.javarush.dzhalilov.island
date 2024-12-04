@@ -1,11 +1,12 @@
 package entity.ration.herbivorou;
 
-import entity.Herbivorous;
-import lombok.ToString;
+import setting.PredatorPreyProbability;
+
+import java.util.Map;
 
 
 public class Boar extends Herbivorous {
-    public Boar(double weight, int maxSpeed, double maxPerCell, double maxSatiety, double foodNeeded){
-        super(weight, maxSpeed, maxPerCell, maxSatiety, foodNeeded);
+    public Boar(Map<String,Object> animalChar){
+        super(animalChar);
     }
 }

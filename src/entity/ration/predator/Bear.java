@@ -1,10 +1,13 @@
 package entity.ration.predator;
 
 import lombok.AllArgsConstructor;
+import setting.PredatorPreyProbability;
+
+import java.util.Map;
 
 
 public class Bear extends Predator {
-    public Bear(double weight, int maxSpeed, double maxPerCell, double maxSatiety, double foodNeeded){
-        super(weight, maxSpeed, maxPerCell, maxSatiety, foodNeeded);
+    public Bear(Map<String,Object> animalChar){
+        super(animalChar);
     }
 }

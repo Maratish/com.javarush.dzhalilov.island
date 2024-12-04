@@ -1,12 +1,14 @@
 package entity.ration.herbivorou;
 
+import entity.Animal;
 import setting.PredatorPreyProbability;
 
 import java.util.Map;
 
-
-public class Caterpillar extends Herbivorous {
-    public Caterpillar(Map<String,Object> animalChar){
+public abstract class Herbivorous extends Animal {
+    public Herbivorous(Map<String,Object> animalChar){
         super(animalChar);
+
     }
+
 }

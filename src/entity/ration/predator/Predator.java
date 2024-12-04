@@ -2,10 +2,13 @@ package entity.ration.predator;
 
 
 import entity.Animal;
+import setting.PredatorPreyProbability;
+
+import java.util.Map;
 
 public class Predator extends Animal {
-    public Predator(double weight, int maxSpeed, double maxPerCell, double maxSatiety, double foodNeeded){
-        super(weight, maxSpeed, maxPerCell, maxSatiety, foodNeeded);
+    public Predator(Map<String,Object> animalChar){
+        super(animalChar);
     }
 
 }

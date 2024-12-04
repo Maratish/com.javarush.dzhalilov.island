@@ -1,112 +1,110 @@
-predator:
-  wolf:
-    wolf: 0.0
-    boa: 0.0
-    fox: 0.0
-    bear: 0.0
-    eagle: 0.0
-    horse: 0.1
-    deer: 0.15
-    rabbit: 0.6
-    mouse: 0.8
-    goat: 0.6
-    sheep: 0.7
-    boar: 0.15
-    buffalo: 0.1
-    duck: 0.4
-    caterpillar: 0.0
-    plant: 0.0
-  boa:
-    wolf: 0.0
-    boa: 0.0
-    fox: 0.15
-    bear: 0.0
-    eagle: 0.0
-    horse: 0.0
-    deer: 0.0
-    rabbit: 0.2
-    mouse: 0.4
-    goat: 0.0
-    sheep: 0.0
-    boar: 0.0
-    buffalo: 0.0
-    duck: 0.1
-    caterpillar: 0.0
-    plant: 0.0
-  fox:
-    wolf: 0.0
-    boa: 0.0
-    fox: 0.0
-    bear: 0.0
-    eagle: 0.0
-    horse: 0.0
-    deer: 0.0
-    rabbit: 0.7
-    mouse: 0.9
-    goat: 0.0
-    sheep: 0.0
-    boar: 0.0
-    buffalo: 0.0
-    duck: 0.6
-    caterpillar: 0.4
-    plant: 0.0
-  bear:
-    wolf: 0.0
-    boa: 0.8
-    fox: 0.0
-    bear: 0.0
-    eagle: 0.0
-    horse: 0.4
-    deer:  0.8
-    rabbit: 0.8
-    mouse: 0.9
-    goat: 0.7
-    sheep: 0.7
-    boar: 0.5
-    buffalo: 0.2
-    duck: 0.1
-    caterpillar: 0.0
-    plant: 0.0
-  eagle:
-    wolf: 0.0
-    boa: 0.0
-    fox: 0.1
-    bear: 0.0
-    eagle: 0.0
-    horse: 0.0
-    deer: 0.0
-    rabbit: 0.9
-    mouse: 0.9
-    goat: 0.0
-    sheep: 0.0
-    boar: 0.0
-    buffalo: 0.0
-    duck: 0.8
-    caterpillar: 0.0
-    plant: 0.0
+wolf:
+  wolf: 0.0
+  boa: 0.0
+  fox: 0.0
+  bear: 0.0
+  eagle: 0.0
+  horse: 0.1
+  deer: 0.15
+  rabbit: 0.6
+  mouse: 0.8
+  goat: 0.6
+  sheep: 0.7
+  boar: 0.15
+  buffalo: 0.1
+  duck: 0.4
+  caterpillar: 0.0
+  plant: 0.0
+boa:
+  wolf: 0.0
+  boa: 0.0
+  fox: 0.15
+  bear: 0.0
+  eagle: 0.0
+  horse: 0.0
+  deer: 0.0
+  rabbit: 0.2
+  mouse: 0.4
+  goat: 0.0
+  sheep: 0.0
+  boar: 0.0
+  buffalo: 0.0
+  duck: 0.1
+  caterpillar: 0.0
+  plant: 0.0
+fox:
+  wolf: 0.0
+  boa: 0.0
+  fox: 0.0
+  bear: 0.0
+  eagle: 0.0
+  horse: 0.0
+  deer: 0.0
+  rabbit: 0.7
+  mouse: 0.9
+  goat: 0.0
+  sheep: 0.0
+  boar: 0.0
+  buffalo: 0.0
+  duck: 0.6
+  caterpillar: 0.4
+  plant: 0.0
+bear:
+  wolf: 0.0
+  boa: 0.8
+  fox: 0.0
+  bear: 0.0
+  eagle: 0.0
+  horse: 0.4
+  deer:  0.8
+  rabbit: 0.8
+  mouse: 0.9
+  goat: 0.7
+  sheep: 0.7
+  boar: 0.5
+  buffalo: 0.2
+  duck: 0.1
+  caterpillar: 0.0
+  plant: 0.0
+eagle:
+  wolf: 0.0
+  boa: 0.0
+  fox: 0.1
+  bear: 0.0
+  eagle: 0.0
+  horse: 0.0
+  deer: 0.0
+  rabbit: 0.9
+  mouse: 0.9
+  goat: 0.0
+  sheep: 0.0
+  boar: 0.0
+  buffalo: 0.0
+  duck: 0.8
+  caterpillar: 0.0
+  plant: 0.0
 
-herbivore:
-  horse:
-    plant: 1.0
-  deer:
-    plant: 1.0
-  rabbit:
-    plant: 1.0
-  mouse:
-    caterpillar: 0.9
-    plant: 1.0
-  goat:
-    plant: 1.0
-  sheep:
-    plant: 1.0
-  boar:
-    mouse: 0.5
-    caterpillar: 0.9
-    plant: 1.0
-  buffalo:
-    plant: 1.0
-  duck:
-    caterpillar: 0.9
-    plant: 1.0
-  caterpillar:
+horse:
+  plant: 1.0
+deer:
+  plant: 1.0
+rabbit:
+  plant: 1.0
+mouse:
+  caterpillar: 0.9
+  plant: 1.0
+goat:
+  plant: 1.0
+sheep:
+  plant: 1.0
+boar:
+  mouse: 0.5
+  caterpillar: 0.9
+  plant: 1.0
+buffalo:
+  plant: 1.0
+duck:
+  caterpillar: 0.9
+  plant: 1.0
+caterpillar:
     plant: 1.0

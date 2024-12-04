@@ -1,7 +1,11 @@
 package entity.ration.predator;
 
+import setting.PredatorPreyProbability;
+
+import java.util.Map;
+
 public class Eagle extends Predator {
-    public Eagle(double weight, int maxSpeed, double maxPerCell, double maxSatiety, double foodNeeded){
-        super(weight, maxSpeed, maxPerCell, maxSatiety, foodNeeded);
+    public Eagle(Map<String,Object> animalChar){
+        super(animalChar);
     }
 }

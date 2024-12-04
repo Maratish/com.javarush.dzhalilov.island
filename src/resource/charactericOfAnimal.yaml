@@ -2,90 +2,90 @@ Predator:
 
   Wolf:
     weight: 50.0
-    max_per_cell: 30
-    max_speed: 3
-    food_needed_for_max_satiety: 8.0
+    maxPerCell: 30
+    maxSpeed: 3
+    foodNeeded: 8.0
 
   Boa:
     weight: 15.0
-    max_per_cell: 30
-    max_speed: 1
-    food_needed_for_max_satiety: 3.0
+    maxPerCell: 30
+    maxSpeed: 1
+    foodNeeded: 3.0
 
   Fox:
     weight: 8.0
-    max_per_cell: 30
-    max_speed: 2
-    food_needed_for_max_satiety: 2.0
+    maxPerCell: 30
+    maxSpeed: 2
+    foodNeeded: 2.0
 
   Bear:
     weight: 500.0
-    max_per_cell: 5
-    max_speed: 2
-    food_needed_for_max_satiety: 80.0
+    maxPerCell: 5
+    maxSpeed: 2
+    foodNeeded: 80.0
 
   Eagle:
     weight: 6.0
-    max_per_cell: 20
-    max_speed: 3
-    food_needed_for_max_satiety: 1.0
+    maxPerCell: 20
+    maxSpeed: 3
+    foodNeeded: 1.0
 Herbivorou:
   Horse:
     weight: 400.0
-    max_per_cell: 20
-    max_speed: 4
-    food_needed_for_max_satiety: 60.0
+    maxPerCell: 20
+    maxSpeed: 4
+    foodNeeded: 60.0
 
   Deer:
     weight: 300.0
-    max_per_cell: 20
-    max_speed: 4
-    food_needed_for_max_satiety: 50.0
+    maxPerCell: 20
+    maxSpeed: 4
+    foodNeeded: 50.0
 
   Rabbit:
     weight: 2.0
-    max_per_cell: 150
-    max_speed: 2
-    food_needed_for_max_satiety: 0.45
+    maxPerCell: 150
+    maxSpeed: 2
+    foodNeeded: 0.45
 
   Mouse:
     weight: 0.05
-    max_per_cell: 500
-    max_speed: 1
-    food_needed_for_max_satiety: 0.01
+    maxPerCell: 500
+    maxSpeed: 1
+    foodNeeded: 0.01
 
   Goat:
     weight: 60.0
-    max_per_cell: 140
-    max_speed: 3
-    food_needed_for_max_satiety: 10.0
+    maxPerCell: 140
+    maxSpeed: 3
+    foodNeeded: 10.0
 
   Sheep:
     weight: 70.0
-    max_per_cell: 140
-    max_speed: 3
-    food_needed_for_max_satiety: 15.0
+    maxPerCell: 140
+    maxSpeed: 3
+    foodNeeded: 15.0
 
   Boar:
     weight: 400.0
-    max_per_cell: 50
-    max_speed: 2
-    food_needed_for_max_satiety: 50.0
+    maxPerCell: 50
+    maxSpeed: 2
+    foodNeeded: 50.0
 
   Buffalo:
     weight: 700.0
-    max_per_cell: 10
-    max_speed: 3
-    food_needed_for_max_satiety: 100.0
+    maxPerCell: 10
+    maxSpeed: 3
+    foodNeeded: 100.0
 
   Duck:
     weight: 1.0
-    max_per_cell: 200
-    max_speed: 4
-    food_needed_for_max_satiety: 0.15
+    maxPerCell: 200
+    maxSpeed: 4
+    foodNeeded: 0.15
 
   Caterpillar:
     weight: 0.01
-    max_per_cell: 1000
-    max_speed: 0
-    food_needed_for_max_satiety: 0.0
+    maxPerCell: 1000
+    maxSpeed: 0
+    foodNeeded: 0.0

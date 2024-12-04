@@ -1,7 +1,11 @@
 package entity.ration.predator;
 
+import setting.PredatorPreyProbability;
+
+import java.util.Map;
+
 public class Boa extends Predator {
-    public Boa(double weight, int maxSpeed, double maxPerCell, double maxSatiety, double foodNeeded){
-        super(weight, maxSpeed, maxPerCell, maxSatiety, foodNeeded);
+    public Boa(Map<String,Object> animalChar){
+        super(animalChar);
     }
 }
