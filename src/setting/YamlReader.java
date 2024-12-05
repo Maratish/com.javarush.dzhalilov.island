@@ -1,5 +1,6 @@
 package setting;
 
+import entity.Animal;
 import lombok.Data;
 import org.yaml.snakeyaml.Yaml;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 @Data
 public class YamlReader {
 
-    public static Map<String, Map<String, Map<String, Object>>> animalCharInit(String yamlPath) {
+    public static Map<String,Map<String, Map<String, Object>>> animalCharInit(String yamlPath) {
         Yaml yaml = new Yaml();
         try (InputStream is = new FileInputStream(yamlPath)) {
             return yaml.load(is);

@@ -4,7 +4,7 @@ import java.util.Map;
 
 
 public class Rabbit extends Herbivorous {
-    public Rabbit(Map<String,Object> animalChar){
-        super(animalChar);
+    public Rabbit() {
+        super();
     }
 }

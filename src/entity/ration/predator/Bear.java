@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 public class Bear extends Predator {
-    public Bear(Map<String,Object> animalChar){
-        super(animalChar);
+    public Bear() {
+        super();
     }
 }

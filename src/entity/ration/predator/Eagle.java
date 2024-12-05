@@ -5,7 +5,7 @@ import setting.PredatorPreyProbability;
 import java.util.Map;
 
 public class Eagle extends Predator {
-    public Eagle(Map<String,Object> animalChar){
-        super(animalChar);
+    public Eagle(){
+        super();
     }
 }
