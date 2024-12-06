@@ -1,19 +1,24 @@
 package island;
 
+import lombok.Data;
+import lombok.Getter;
 import setting.Setting;
 
+import java.util.Map;
 import java.util.concurrent.*;
 
+@Data
 public class Island {
-    final int ROWS;
-    final int COLUMNS;
-    final Cell[][] ISLAND_MAP;
+    public static int ROWS=0;
+    public static int COLUMNS=0;
+    @Getter
+    final private ConcurrentHashMap<Coordinate, Cell> ISLAND_MAP = new ConcurrentHashMap<>();
+
+
 
     public Island(int rows, int columns) {
-        this.ROWS = rows;
-        this.COLUMNS = columns;
-        ISLAND_MAP = new Cell[rows][columns];
-        CountDownLatch reproduceLatch = new CountDownLatch(ROWS * COLUMNS);
+        ROWS = rows;
+        COLUMNS = columns;
         islandInit();
     }
 
@@ -22,10 +27,11 @@ public class Island {
         CountDownLatch initLatch = new CountDownLatch(ROWS * COLUMNS);
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
-                final int row = i;
-                final int column = j;
+                    final int row=i;
+                    final int column=j;
                 executorService.execute(() -> {
-                    ISLAND_MAP[row][column] = new Cell(row, column);
+                    Coordinate coordinate = new Coordinate(row, column);
+                    ISLAND_MAP.put(coordinate, new Cell(coordinate));
                     initLatch.countDown();
                 });
             }
@@ -33,20 +39,18 @@ public class Island {
         try {
             initLatch.await();
             System.out.println("Все клетки инициализированы");
-            for (Cell[] row : ISLAND_MAP) {
-                for (Cell cell : row) {
-                    executorService.execute(cell);
-                }
+            for (Cell cell : ISLAND_MAP.values()) {
+                executorService.execute(cell);
             }
-
             System.out.println("Спаривание завершено");
             executorService.shutdown();
-            if (!executorService.awaitTermination(50, TimeUnit.MILLISECONDS)) {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                 System.err.println("Превышен срок ожидания завершения потоков");
                 executorService.shutdownNow();
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        //TODO заставить многопоточно двигаться животных
     }
 }

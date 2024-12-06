@@ -12,7 +12,7 @@ public class PredatorPreyProbability {
     private static Map<String, Map<String, Double>> predatorPreyMatrix;
 
     public PredatorPreyProbability(Map<String, Map<String, Double>> predatorPreyMatrix) {
-        this.predatorPreyMatrix = predatorPreyMatrix != null ? predatorPreyMatrix : new HashMap<>();
+        PredatorPreyProbability.predatorPreyMatrix = predatorPreyMatrix != null ? predatorPreyMatrix : new HashMap<>();
     }
 
     public Double getProbability(String predator, String prey) {

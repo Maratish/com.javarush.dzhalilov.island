@@ -1,6 +1,7 @@
 package setting;
 
 import entity.Animal;
+import lombok.Getter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +17,7 @@ public class AnimalFactory {
 
     static CopyOnWriteArrayList<Animal> allAnimalList = new CopyOnWriteArrayList<>();
 
-    public static CopyOnWriteArrayList<Animal> createAnimal(Map<String, Map<String, Map<String, Object>>> animalCharTable) {
+    public static void createAnimal(Map<String, Map<String, Map<String, Object>>> animalCharTable) {
         for (String animalRatio : animalCharTable.keySet()) {
             for (String animalName : animalCharTable.get(animalRatio).keySet()) {
                 Class animalClassName = null;
@@ -30,18 +31,14 @@ public class AnimalFactory {
                 }
             }
         }
-        return allAnimalList;
     }
 
     private static String getFullName(String animalRatio, String animalName) {
         return "entity.ration." + animalRatio.toLowerCase() + "." + animalName;
     }
 
+    @Getter
     static ConcurrentHashMap<String, Map<String, Object>> ANIMALCHARTABLE = new ConcurrentHashMap<>();
-
-    public static ConcurrentHashMap<String, Map<String, Object>> getANIMALCHARTABLE() {
-        return ANIMALCHARTABLE;
-    }
 
 
     public static void initializeAnimalCharTable() {

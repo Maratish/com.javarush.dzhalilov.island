@@ -2,6 +2,9 @@ package island;
 
 import entity.Animal;
 import entity.Plant;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import setting.AnimalFactory;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,43 +12,30 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+@Data
 public class Cell implements Runnable {
-    int xCoord;
-    int yCoord;
+    Coordinate coordinate;
     private final CopyOnWriteArrayList<Animal> animalsOnCell = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
     public final ConcurrentHashMap<Class<? extends Animal>, Integer> typeOfAnimalOnCell = new ConcurrentHashMap<>();
 
-    public Cell(int xCoord, int yCoord) {
-        this.xCoord = xCoord;
-        this.yCoord = yCoord;
+    public Cell(Coordinate coordinate) {
+        this.coordinate = coordinate;
         populateAnimalOnCell();
         populatePlantsOnCell();
         calculateAnimalsCount();
 
     }
 
-    public Cell getCoordinate(){
-        return this;
-    }
-
-    public int getxCoord() {
-        return xCoord;
-    }
-
-    public int getyCoord() {
-        return yCoord;
-    }
-
     public void populateAnimalOnCell() {
-
         for (Animal animal : AnimalFactory.getAllAnimalList()) {
             double maxOnCell = animal.getMaxPerCell();
-            for (int i = 0; i < maxOnCell; i++) {
+            for (int i = 0; i < maxOnCell * ThreadLocalRandom.current().nextDouble(0.6); i++) {
                 Animal newAnimal = null;
                 try {
                     newAnimal = (animal.getClass().getDeclaredConstructor().newInstance());
@@ -64,11 +54,6 @@ public class Cell implements Runnable {
         }
     }
 
-    public CopyOnWriteArrayList<Animal> getAnimalsOnCell() {
-        return animalsOnCell;
-
-    }
-
     public void calculateAnimalsCount() {
         for (Animal animal : animalsOnCell) {
             Class<? extends Animal> animalClass = animal.getClass();
@@ -81,17 +66,30 @@ public class Cell implements Runnable {
         }
     }
 
-    public void addAnimal(Animal animal) {
+    public boolean addAnimal(Animal animal) {
         animalsOnCell.add(animal);
+        animal.setCoordinate(coordinate);
+        return true;
     }
 
     @Override
     public void run() {
-          for (Animal animal:animalsOnCell){
-              animal.tryToSex(this);
-          }
+        for (Animal animal : animalsOnCell) {
+
+            animal.tryToSex(this);
         }
     }
+    public int getXcoordynate(){
+        return this.getCoordinate().getX();
+    }
+    public int getYcoordynate(){
+        return this.getCoordinate().getY();
+    }
+    public void removeMovedAnimal(Animal animal){
+        animalsOnCell.remove(animal);
+    }
+
+}
 
 
 

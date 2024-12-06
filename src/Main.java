@@ -15,8 +15,8 @@ public class Main {
     public static void main(String[] args)  {
         AnimalFactory.initializeAnimalCharTable();
         AnimalFactory.createAnimal(YamlReader.animalCharInit("src/resource/charactericOfAnimal.yaml"));
-            Island island = new Island(1,1);
-            //TODO секс вроде сделан, теперь перемещение и поедание. потоки запускаются при инициализации острова.
+            Island island = new Island(100,20);
+
 
 
 

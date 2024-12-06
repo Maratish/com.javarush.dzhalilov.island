@@ -1,97 +1,111 @@
 package entity;
 
 import island.Cell;
+import island.Coordinate;
+import island.Island;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import setting.AnimalFactory;
-
 import setting.Setting;
+import setting.YamlReader;
 
 import java.lang.reflect.InvocationTargetException;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
+
+@ToString
 public abstract class Animal {
     double weight;
     int maxSpeed;
+    @Getter
     double maxPerCell;
     double maxSatiety;
     double actualSatiety;
     boolean virginity;
-    static AtomicInteger animalCount = new AtomicInteger();
-
-    public double getMaxPerCell() {
-        return maxPerCell;
-    }
+    @Getter @Setter
+    Coordinate coordinate;
 
     public Animal() {
         String className = this.getClass().getSimpleName();
         String parentName = this.getClass().getSuperclass().getSimpleName().toLowerCase();
         Map<String, Object> animalChar = AnimalFactory.getANIMALCHARTABLE().get(className);
-        this.weight = getDouble(animalChar, "weight");
-        this.maxSpeed = getInt(animalChar, "maxSpeed");
-        this.maxPerCell = getDouble(animalChar, "maxPerCell");
-        this.maxSatiety = getDouble(animalChar, "foodNeeded");
+        this.weight = YamlReader.getDouble(animalChar, "weight");
+        this.maxSpeed = YamlReader.getInt(animalChar, "maxSpeed");
+        this.maxPerCell = YamlReader.getDouble(animalChar, "maxPerCell");
+        this.maxSatiety = YamlReader.getDouble(animalChar, "foodNeeded");
         this.actualSatiety = maxSatiety;
         this.virginity = true;
-
-
     }
 
-    private double getDouble(Map<String, Object> map, String key) {
-        Object value = map.get(key);
-        if (value == null) {
-            throw new IllegalArgumentException("Missing value for key: " + key);
-        }
-        if (!(value instanceof Number)) {
-            throw new IllegalArgumentException("Invalid type for key: " + key);
-        }
-        return ((Number) value).doubleValue();
-    }
-
-    private int getInt(Map<String, Object> map, String key) {
-        Object value = map.get(key);
-        if (value == null) {
-            throw new IllegalArgumentException(key);
-        }
-        if (!(value instanceof Number)) {
-            throw new IllegalArgumentException(key);
-        }
-        return ((Number) value).intValue();
-    }
-
-
-    public boolean isVirginity() {
-        return virginity;
-    }
 
     public void tryToSex(Cell cell) {
-        if (cell.getAnimalsOnCell().size() > 2) {
-            for (Animal animal : cell.getAnimalsOnCell()) {
-                if (this.canReproduce(animal)) {
-                    ThreadLocalRandom localRandom = ThreadLocalRandom.current();
+        ThreadLocalRandom localRandom = ThreadLocalRandom.current();
+        if (localRandom.nextDouble(1) < Setting.REPRODUCTION_PROBABILITY) {
+            List<Animal> animals = cell.getAnimalsOnCell();
+            if (animals.size() > 1) {
+                Optional<Animal> findVirginAnimal = animals.stream().filter(this::canReproduce).findFirst();
+                if (findVirginAnimal.isPresent()) {
+                    Animal animal = findVirginAnimal.get();
                     this.virginity = false;
                     animal.virginity = false;
-                    if (localRandom.nextDouble() > Setting.REPRODUCTION_PROBABILITY) {
-                        try {
-                            cell.addAnimal(this.getClass().getConstructor().newInstance());
-                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                                 NoSuchMethodException e) {
-                            throw new RuntimeException("ошибка спаривания " + e);
-                        }
+                    try {
+                        cell.addAnimal(this.getClass().getConstructor().newInstance());
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                             NoSuchMethodException e) {
+                        throw new RuntimeException("ошибка спаривания " + e);
                     }
                 }
             }
+
         }
     }
 
     public boolean canReproduce(Animal other) {
-        return (this.getClass() == other.getClass()) && (this.virginity == true && other.virginity == true);
+        return (this.getClass() == other.getClass()) && (other.virginity && this.virginity);
     }
 
-    @Override
-    public String toString() {
-        return STR."\{this.getClass().getSimpleName()}{weight=\{weight}, maxSpeed=\{maxSpeed}, maxPerCell=\{maxPerCell}, maxSatiety=\{maxSatiety}, actualSatiety=\{actualSatiety}}";
+    public void move(Cell cell) {
+        if (this.actualSatiety < this.maxSatiety * 0.5) {
+            List<Coordinate> moveDirections = chooseDirection((cell));
+            if (!(moveDirections.isEmpty())) {
+                Coordinate newCoordinate= moveDirections.get(ThreadLocalRandom.current().nextInt(moveDirections.size()));
+                Cell newCell= new Cell(newCoordinate);
+                if (newCoordinate!=null&&newCell.addAnimal(this));
+                cell.removeMovedAnimal(this);
+                this.setCoordinate(newCoordinate);
+            }
+        }
+    }
+
+
+    public List<Coordinate> chooseDirection(Cell cell) {
+        List<Coordinate> moveDirections = new ArrayList<>();
+        for (int i = -maxSpeed; i <= maxSpeed; i++) {
+            for (int j = -maxSpeed; j <= maxSpeed; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                Coordinate coordinate = new Coordinate(cell.getXcoordynate() + i, cell.getYcoordynate() + j);
+                if (isValidCoordinate(coordinate)) {
+                    moveDirections.add(coordinate);
+                }
+            }
+        }
+        return moveDirections;
+    }
+
+    public boolean isValidCoordinate(Coordinate coordinate) {
+        return coordinate.getX() >= 0 && coordinate.getX() < Island.ROWS &&
+                coordinate.getY() >= 0 && coordinate.getY() < Island.COLUMNS;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate=coordinate;
     }
 }
