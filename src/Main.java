@@ -15,7 +15,8 @@ public class Main {
     public static void main(String[] args)  {
         AnimalFactory.initializeAnimalCharTable();
         AnimalFactory.createAnimal(YamlReader.animalCharInit("src/resource/charactericOfAnimal.yaml"));
-            Island island = new Island(100,20);
+            Island island = new Island();
+        //TODO сделать eat() и визуал
 
 
 

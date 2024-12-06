@@ -12,4 +12,6 @@ public class Setting {
     public static final int MAX_SATIETY = 1;
     public static final double REPRODUCTION_PROBABILITY=0.1;
     public static final int PROCCESORS_CORE=Runtime.getRuntime().availableProcessors();
+    public static final int NUMBER_OF_ROWS = 10;
+    public static final int NUMBER_OF_COLUMNS=10;
 }

@@ -1,16 +1,13 @@
 package entity;
-
 import island.Cell;
 import island.Coordinate;
 import island.Island;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import setting.AnimalFactory;
 import setting.Setting;
 import setting.YamlReader;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,15 +68,16 @@ public abstract class Animal {
     }
 
     public void move(Cell cell) {
-        if (this.actualSatiety < this.maxSatiety * 0.5) {
+        if (this.actualSatiety == this.maxSatiety) {
             List<Coordinate> moveDirections = chooseDirection((cell));
             if (!(moveDirections.isEmpty())) {
                 Coordinate newCoordinate= moveDirections.get(ThreadLocalRandom.current().nextInt(moveDirections.size()));
-                Cell newCell= new Cell(newCoordinate);
+                Cell newCell= Island.getISLAND_MAP().get(newCoordinate);
                 if (newCoordinate!=null&&newCell.addAnimal(this));
                 cell.removeMovedAnimal(this);
                 this.setCoordinate(newCoordinate);
             }
+
         }
     }
 
@@ -101,8 +99,8 @@ public abstract class Animal {
     }
 
     public boolean isValidCoordinate(Coordinate coordinate) {
-        return coordinate.getX() >= 0 && coordinate.getX() < Island.ROWS &&
-                coordinate.getY() >= 0 && coordinate.getY() < Island.COLUMNS;
+        return coordinate.getX() >= 0 && coordinate.getX() < Setting.NUMBER_OF_ROWS &&
+                coordinate.getY() >= 0 && coordinate.getY() < Setting.NUMBER_OF_COLUMNS;
     }
 
     public void setCoordinate(Coordinate coordinate) {

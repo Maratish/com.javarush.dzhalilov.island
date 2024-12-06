@@ -1,25 +1,19 @@
 package island;
-
 import entity.Animal;
 import entity.Plant;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 import setting.AnimalFactory;
-
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 
 @Data
 public class Cell implements Runnable {
     Coordinate coordinate;
+    @Getter
     private final CopyOnWriteArrayList<Animal> animalsOnCell = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<Plant> plants = new CopyOnWriteArrayList<>();
     public final ConcurrentHashMap<Class<? extends Animal>, Integer> typeOfAnimalOnCell = new ConcurrentHashMap<>();
@@ -30,6 +24,10 @@ public class Cell implements Runnable {
         populatePlantsOnCell();
         calculateAnimalsCount();
 
+    }
+
+    public int countOfAnimalsOnCell() {
+        return animalsOnCell.size();
     }
 
     public void populateAnimalOnCell() {
@@ -72,11 +70,13 @@ public class Cell implements Runnable {
         return true;
     }
 
+
+
     @Override
     public void run() {
         for (Animal animal : animalsOnCell) {
-
             animal.tryToSex(this);
+            animal.move(this);
         }
     }
     public int getXcoordynate(){
