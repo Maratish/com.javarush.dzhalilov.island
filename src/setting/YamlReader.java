@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 public class YamlReader {
@@ -42,15 +43,7 @@ public class YamlReader {
             System.err.println("НЕВЕРНЫЙ");
             return 0;
         }
-    }
-
-    public static PredatorPreyProbability probabilityPrey(String yamlPath) {
-        Yaml yaml = new Yaml();
-        try (InputStream is = new FileInputStream(yamlPath)) {
-            Map<String, Map<String, Double>> matrix = yaml.load(is);
-            return new PredatorPreyProbability(matrix);
-        } catch (IOException | ClassCastException e) {
-            throw new RuntimeException("Ошибка загрузки или обработки YAML файла: " + e.getMessage(), e);
         }
-    }
-            }
+
+
+                }

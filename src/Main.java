@@ -14,9 +14,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class Main {
     public static void main(String[] args)  {
         AnimalFactory.initializeAnimalCharTable();
-        AnimalFactory.createAnimal(YamlReader.animalCharInit("src/resource/charactericOfAnimal.yaml"));
+        AnimalFactory.createAnimal(YamlReader.animalCharInit(Setting.PATH_OF_ANIMAL_CHAR));
             Island island = new Island();
-        //TODO сделать eat() и визуал
+
 
 
 

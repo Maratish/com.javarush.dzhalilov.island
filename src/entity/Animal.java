@@ -1,4 +1,5 @@
 package entity;
+
 import island.Cell;
 import island.Coordinate;
 import island.Island;
@@ -6,13 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import setting.AnimalFactory;
+import setting.PredatorPreyProbability;
 import setting.Setting;
 import setting.YamlReader;
+
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -25,7 +25,8 @@ public abstract class Animal {
     double maxSatiety;
     double actualSatiety;
     boolean virginity;
-    @Getter @Setter
+    @Getter
+    @Setter
     Coordinate coordinate;
 
     public Animal() {
@@ -41,7 +42,7 @@ public abstract class Animal {
     }
 
 
-    public void tryToSex(Cell cell) {
+    public synchronized void tryToSex(Cell cell) {
         ThreadLocalRandom localRandom = ThreadLocalRandom.current();
         if (localRandom.nextDouble(1) < Setting.REPRODUCTION_PROBABILITY) {
             List<Animal> animals = cell.getAnimalsOnCell();
@@ -67,14 +68,16 @@ public abstract class Animal {
         return (this.getClass() == other.getClass()) && (other.virginity && this.virginity);
     }
 
-    public void move(Cell cell) {
+    public synchronized void eat(Cell cell) {}
+
+    public synchronized void move(Cell cell) {
         if (this.actualSatiety == this.maxSatiety) {
             List<Coordinate> moveDirections = chooseDirection((cell));
             if (!(moveDirections.isEmpty())) {
-                Coordinate newCoordinate= moveDirections.get(ThreadLocalRandom.current().nextInt(moveDirections.size()));
-                Cell newCell= Island.getISLAND_MAP().get(newCoordinate);
-                if (newCoordinate!=null&&newCell.addAnimal(this));
-                cell.removeMovedAnimal(this);
+                Coordinate newCoordinate = moveDirections.get(ThreadLocalRandom.current().nextInt(moveDirections.size()));
+                Cell newCell = Island.getISLAND_MAP().get(newCoordinate);
+                if (newCoordinate != null && newCell.addAnimal(this)) ;
+                cell.removeAnimalFromCell(this);
                 this.setCoordinate(newCoordinate);
             }
 
@@ -104,6 +107,15 @@ public abstract class Animal {
     }
 
     public void setCoordinate(Coordinate coordinate) {
-        this.coordinate=coordinate;
+        this.coordinate = coordinate;
     }
+    public void die(Island islandMap){
+        Cell cell = Island.ISLAND_MAP.get(this.getCoordinate());
+        cell.removeAnimalFromCell(this);
+    }
+
+    public Double getProbability(String predator, String prey) {
+        return PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator, new HashMap<>()).getOrDefault(prey, 0.0);
+    }
+
 }

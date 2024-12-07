@@ -85,7 +85,7 @@ public class Cell implements Runnable {
     public int getYcoordynate(){
         return this.getCoordinate().getY();
     }
-    public void removeMovedAnimal(Animal animal){
+    public void removeAnimalFromCell(Animal animal){
         animalsOnCell.remove(animal);
     }
 

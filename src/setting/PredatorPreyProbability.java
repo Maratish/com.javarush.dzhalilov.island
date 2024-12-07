@@ -2,23 +2,29 @@ package setting;
 
 import lombok.Getter;
 import lombok.ToString;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @ToString
 @Getter
 public class PredatorPreyProbability {
+    @Getter
     private static Map<String, Map<String, Double>> predatorPreyMatrix;
 
-    public PredatorPreyProbability(Map<String, Map<String, Double>> predatorPreyMatrix) {
-        PredatorPreyProbability.predatorPreyMatrix = predatorPreyMatrix != null ? predatorPreyMatrix : new HashMap<>();
+    static {
+            Yaml yaml = new Yaml();
+            try (InputStream is = new FileInputStream(Setting.PATH_OF_ANIMAL_CHAR)) {
+                Map<String, Map<String, Double>> matrix = yaml.load(is);
+     predatorPreyMatrix=Collections.unmodifiableMap(new HashMap<>(matrix));
+            } catch (IOException | ClassCastException e) {
+                predatorPreyMatrix=new HashMap<>();
+                throw new RuntimeException(e);
+            }
+        }
     }
-
-    public Double getProbability(String predator, String prey) {
-        return predatorPreyMatrix.getOrDefault(predator, new HashMap<>()).getOrDefault(prey, 0.0);
-    }
-    public Map<String, Map<String, Double>> getPredatorPreyMatrix(){
-        return predatorPreyMatrix;
-    }
-}
