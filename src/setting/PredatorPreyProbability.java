@@ -19,7 +19,7 @@ public class PredatorPreyProbability {
 
     static {
             Yaml yaml = new Yaml();
-            try (InputStream is = new FileInputStream(Setting.PATH_OF_ANIMAL_CHAR)) {
+            try (InputStream is = new FileInputStream(Setting.PATH_OF_ANIMAL_PROBABILITY)) {
                 Map<String, Map<String, Double>> matrix = yaml.load(is);
      predatorPreyMatrix=Collections.unmodifiableMap(new HashMap<>(matrix));
             } catch (IOException | ClassCastException e) {

@@ -77,6 +77,7 @@ public class Cell implements Runnable {
         for (Animal animal : animalsOnCell) {
             animal.tryToSex(this);
             animal.move(this);
+            animal.eat(this);
         }
     }
     public int getXcoordynate(){

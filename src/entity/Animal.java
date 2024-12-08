@@ -6,6 +6,7 @@ import island.Island;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.w3c.dom.ls.LSOutput;
 import setting.AnimalFactory;
 import setting.PredatorPreyProbability;
 import setting.Setting;
@@ -68,7 +69,11 @@ public abstract class Animal {
         return (this.getClass() == other.getClass()) && (other.virginity && this.virginity);
     }
 
-    public synchronized void eat(Cell cell) {}
+    public synchronized void eat(Cell cell) {
+        Animal animal = cell.getAnimalsOnCell().get(ThreadLocalRandom.current().nextInt(cell.countOfAnimalsOnCell()));
+        System.out.println(getProbability(this, animal));
+    }
+
 
     public synchronized void move(Cell cell) {
         if (this.actualSatiety == this.maxSatiety) {
@@ -109,13 +114,19 @@ public abstract class Animal {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
-    public void die(Island islandMap){
+
+    public void die(Island islandMap) {
         Cell cell = Island.ISLAND_MAP.get(this.getCoordinate());
         cell.removeAnimalFromCell(this);
     }
 
-    public Double getProbability(String predator, String prey) {
-        return PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator, new HashMap<>()).getOrDefault(prey, 0.0);
-    }
+    public Double getProbability(Animal predator, Animal prey) {
+        System.out.println("-".repeat(100));
+        System.out.println(predator+"__"+PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator.getClass().getSimpleName()));
+        System.out.println(prey+"__"+PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(prey.getClass().getSimpleName()));
+        System.out.println(PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator.getClass().getSimpleName(),new HashMap<>()).getOrDefault(prey.getClass().getSimpleName(),0.0));
+        System.out.println("-".repeat(100));
+        return 0.0;
 
+    }
 }
