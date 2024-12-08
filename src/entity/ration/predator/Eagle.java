@@ -1,10 +1,6 @@
 package entity.ration.predator;
 
-import setting.PredatorPreyProbability;
-
-import java.util.Map;
-
-public class Eagle extends Predator {
+public class Eagle extends Predators {
     public Eagle(){
         super();
     }

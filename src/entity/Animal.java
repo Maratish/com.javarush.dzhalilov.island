@@ -1,5 +1,7 @@
 package entity;
 
+import entity.ration.herbivorou.Herbivorous;
+import entity.ration.predator.Predators;
 import island.Cell;
 import island.Coordinate;
 import island.Island;
@@ -15,6 +17,7 @@ import setting.YamlReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 
 @ToString
@@ -26,6 +29,7 @@ public abstract class Animal {
     double maxSatiety;
     double actualSatiety;
     boolean virginity;
+    String ration;
     @Getter
     @Setter
     Coordinate coordinate;
@@ -40,6 +44,7 @@ public abstract class Animal {
         this.maxSatiety = YamlReader.getDouble(animalChar, "foodNeeded");
         this.actualSatiety = maxSatiety;
         this.virginity = true;
+        this.ration = parentName;
     }
 
 
@@ -69,9 +74,11 @@ public abstract class Animal {
         return (this.getClass() == other.getClass()) && (other.virginity && this.virginity);
     }
 
-    public synchronized void eat(Cell cell) {
-        Animal animal = cell.getAnimalsOnCell().get(ThreadLocalRandom.current().nextInt(cell.countOfAnimalsOnCell()));
-        System.out.println(getProbability(this, animal));
+    public void eat(Cell cell) {
+        cell.getAnimalsOnCell().stream()
+                .filter(animal -> animal.isPredator()) // Фильтруем нехищников (жертв)
+                .collect(Collectors.toList()).forEach(x-> System.out.println(x.getClass().getSimpleName()));
+        //TODO фильтруем хищников и кабана задаем логики охоты (отнимать жизни и тд)
     }
 
 
@@ -85,8 +92,11 @@ public abstract class Animal {
                 cell.removeAnimalFromCell(this);
                 this.setCoordinate(newCoordinate);
             }
-
         }
+    }
+
+    public boolean isPredator(){
+        return this.ration.equals("predators");
     }
 
 
@@ -121,12 +131,7 @@ public abstract class Animal {
     }
 
     public Double getProbability(Animal predator, Animal prey) {
-        System.out.println("-".repeat(100));
-        System.out.println(predator+"__"+PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator.getClass().getSimpleName()));
-        System.out.println(prey+"__"+PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(prey.getClass().getSimpleName()));
-        System.out.println(PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator.getClass().getSimpleName(),new HashMap<>()).getOrDefault(prey.getClass().getSimpleName(),0.0));
-        System.out.println("-".repeat(100));
-        return 0.0;
-
+        return PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator, new HashMap<>()).getOrDefault(prey, 0.0);
     }
 }
+
