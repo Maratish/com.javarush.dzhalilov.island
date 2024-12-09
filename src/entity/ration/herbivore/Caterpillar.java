@@ -1,8 +1,4 @@
-package entity.ration.herbivorou;
-
-import setting.PredatorPreyProbability;
-
-import java.util.Map;
+package entity.ration.herbivore;
 
 
 public class Caterpillar extends Herbivorous {

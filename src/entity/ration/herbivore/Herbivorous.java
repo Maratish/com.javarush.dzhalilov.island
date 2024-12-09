@@ -1,9 +1,6 @@
-package entity.ration.herbivorou;
+package entity.ration.herbivore;
 
 import entity.Animal;
-import setting.PredatorPreyProbability;
-
-import java.util.Map;
 
 public abstract class Herbivorous extends Animal {
     public Herbivorous() {

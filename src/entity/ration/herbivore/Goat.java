@@ -1,6 +1,4 @@
-package entity.ration.herbivorou;
-
-import java.util.Map;
+package entity.ration.herbivore;
 
 
 public class Goat extends Herbivorous {

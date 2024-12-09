@@ -2,6 +2,7 @@ package setting;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Setting {
 
@@ -16,4 +17,5 @@ public class Setting {
     public static final int NUMBER_OF_COLUMNS=10;
     public static final String PATH_OF_ANIMAL_CHAR="src/resource/charactericOfAnimal.yaml";
     public static final String PATH_OF_ANIMAL_PROBABILITY="src/resource/preyProbability.yaml";
+    public static final Double RANDOM= ThreadLocalRandom.current().nextDouble();
 }
