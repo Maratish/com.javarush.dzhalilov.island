@@ -3,6 +3,7 @@ package entity;
 import island.Cell;
 import island.Coordinate;
 import island.Island;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,6 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 @ToString
+@Data
 public abstract class Animal {
     double initWeight;
     double actualWeight;
@@ -47,8 +49,8 @@ public abstract class Animal {
 
 
     public synchronized void tryToSex(Cell cell) {
-
-        if (Setting.RANDOM < Setting.REPRODUCTION_PROBABILITY) {
+        Double birthProbability = ThreadLocalRandom.current().nextDouble();
+        if (birthProbability < Setting.REPRODUCTION_PROBABILITY) {
             List<Animal> animals = cell.getAnimalsOnCell();
             if (animals.size() > 1) {
                 Optional<Animal> findVirginAnimal = animals.stream().filter(this::canReproduce).findFirst();
@@ -56,8 +58,8 @@ public abstract class Animal {
                     Animal animal = findVirginAnimal.get();
                     this.virginity = false;
                     animal.virginity = false;
-                    sexCostAndCheckDeath(this,cell);
-                    sexCostAndCheckDeath(animal,cell);
+                    sexCostAndCheckDeath(this, cell);
+                    sexCostAndCheckDeath(animal, cell);
                     try {
                         cell.addAnimal(this.getClass().getConstructor().newInstance());
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
@@ -70,35 +72,35 @@ public abstract class Animal {
         }
     }
 
-    public void sexCostAndCheckDeath(Animal animal,Cell cell) {
-         animal.actualSatiety= animal.actualSatiety-initWeight * 0.05;
-         animal.checkForDie(cell);
+    public void sexCostAndCheckDeath(Animal animal, Cell cell) {
+        animal.actualSatiety = animal.actualSatiety - animal.actualWeight * 0.05;
+        animal.checkForDie(cell);
     }
 
     public boolean canReproduce(Animal other) {
         return (this.getClass() == other.getClass()) && (other.virginity && this.virginity);
     }
 
-    public void eat(Cell cell) {
-        if (this.isOmnivore() || this.isPredator()) {
-            int randomPrey=ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
-            Animal prey = cell.getAnimalsOnCell().get(randomPrey);
-            double probabilityOfEat = getProbability(this, prey);
-            Double random = ThreadLocalRandom.current().nextDouble();
-            if (random < probabilityOfEat) {
-                if (actualSatiety > huntingCost()) {
-                    cell.removeAnimalFromCell(prey);
-                    actualSatiety += this.satietyFromHunting(prey) - huntingCost();
-                    checkForDie(cell);
-                } else {
-                    die(cell);
-                }
-            } else {
-                actualSatiety = actualSatiety - this.huntingCost();
-                checkForDie(cell);
-            }
-        }
-    }
+    public abstract void eat(Cell cell);
+//        if (this.isOmnivore() || this.isPredator()) {
+//            int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
+//            Animal prey = cell.getAnimalsOnCell().get(randomPrey);
+//            double probabilityOfEat = getProbability(this, prey);
+//            Double random = ThreadLocalRandom.current().nextDouble();
+//            if (random < probabilityOfEat) {
+//                if (actualSatiety > huntingCost()) {
+//                    cell.removeAnimalFromCell(prey);
+//                    actualSatiety += this.satietyFromHunting(prey) - huntingCost();
+//                    checkForDie(cell);
+//                } else {
+//                    die(cell);
+//                }
+//            } else {
+//                actualSatiety = actualSatiety - this.huntingCost();
+//                checkForDie(cell);
+//            }
+//        }
+//    }
 
     public double huntingCost() {
         return this.actualWeight * 0.1;
@@ -167,7 +169,9 @@ public abstract class Animal {
     }
 
     public void checkForDie(Cell cell) {
-        if (this.actualWeight < this.initWeight / 2 || this.actualSatiety < this.maxSatiety * 0.2) {
+        if (this.actualWeight < this.initWeight / 2 ||
+                this.actualSatiety < this.maxSatiety * 0.2 ||
+                this.actualSatiety < this.maxSatiety * 0.5 && ThreadLocalRandom.current().nextDouble() < 0.5) {
             this.die(cell);
         }
     }

@@ -5,17 +5,16 @@ import lombok.Getter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AnimalFactory {
 
-    public static CopyOnWriteArrayList<Animal> getAllAnimalList() {
-        return allAnimalList;
-    }
-
-    static CopyOnWriteArrayList<Animal> allAnimalList = new CopyOnWriteArrayList<>();
+    @Getter
+   private static ArrayList<Animal> allAnimalList = new ArrayList<>();
 
     public static void createAnimal(Map<String, Map<String, Map<String, Object>>> animalCharTable) {
         for (String animalRatio : animalCharTable.keySet()) {
@@ -38,7 +37,7 @@ public class AnimalFactory {
     }
 
     @Getter
-    static ConcurrentHashMap<String, Map<String, Object>> ANIMALCHARTABLE = new ConcurrentHashMap<>();
+    private static HashMap<String, Map<String, Object>> ANIMALCHARTABLE = new HashMap<>();
 
 
     public static void initializeAnimalCharTable() {

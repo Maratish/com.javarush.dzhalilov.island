@@ -7,4 +7,6 @@ public abstract class Herbivorous extends Animal {
         super();
     }
 
+
+
 }

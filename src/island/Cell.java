@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import setting.AnimalFactory;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,7 +24,6 @@ public class Cell implements Runnable {
         this.coordinate = coordinate;
         populateAnimalOnCell();
         populatePlantsOnCell();
-        calculateAnimalsCount();
 
     }
 
@@ -52,18 +53,6 @@ public class Cell implements Runnable {
         }
     }
 
-    public void calculateAnimalsCount() {
-        for (Animal animal : animalsOnCell) {
-            Class<? extends Animal> animalClass = animal.getClass();
-            if (typeOfAnimalOnCell.containsKey(animalClass)) {
-                AtomicInteger count = new AtomicInteger(typeOfAnimalOnCell.get(animalClass));
-                typeOfAnimalOnCell.put(animalClass, count.incrementAndGet());
-            } else {
-                typeOfAnimalOnCell.put(animalClass, 1);
-            }
-        }
-    }
-
     public boolean addAnimal(Animal animal) {
         animalsOnCell.add(animal);
         animal.setCoordinate(coordinate);
@@ -74,7 +63,8 @@ public class Cell implements Runnable {
 
     @Override
     public void run() {
-        for (Animal animal : animalsOnCell) {
+        List<Animal> animalOnCellCopy=new ArrayList<>(animalsOnCell);
+        for (Animal animal : animalOnCellCopy) {
             animal.tryToSex(this);
             animal.move(this);
             animal.eat(this);
