@@ -21,7 +21,7 @@ public class Island {
 
     public int getTotalAnimalCount() {
         return ISLAND_MAP.values().stream()
-                .mapToInt(Cell::countOfAnimalsOnCell)
+                .mapToInt(Cell::countOfAllAnimalsOnCell)
                 .sum();
     }
 

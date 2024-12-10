@@ -47,7 +47,6 @@ public abstract class Animal {
         this.ration = parentName;
     }
 
-
     public synchronized void tryToSex(Cell cell) {
         Double birthProbability = ThreadLocalRandom.current().nextDouble();
         if (birthProbability < Setting.REPRODUCTION_PROBABILITY) {
@@ -82,34 +81,17 @@ public abstract class Animal {
     }
 
     public abstract void eat(Cell cell);
-//        if (this.isOmnivore() || this.isPredator()) {
-//            int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
-//            Animal prey = cell.getAnimalsOnCell().get(randomPrey);
-//            double probabilityOfEat = getProbability(this, prey);
-//            Double random = ThreadLocalRandom.current().nextDouble();
-//            if (random < probabilityOfEat) {
-//                if (actualSatiety > huntingCost()) {
-//                    cell.removeAnimalFromCell(prey);
-//                    actualSatiety += this.satietyFromHunting(prey) - huntingCost();
-//                    checkForDie(cell);
-//                } else {
-//                    die(cell);
-//                }
-//            } else {
-//                actualSatiety = actualSatiety - this.huntingCost();
-//                checkForDie(cell);
-//            }
-//        }
-//    }
-
     public double huntingCost() {
         return this.actualWeight * 0.1;
+    }
+
+    public Double getProbability(Animal predator, Animal prey) {
+        return PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator.getClass().getSimpleName(), new HashMap<>()).getOrDefault(prey.getClass().getSimpleName(), 0.0);
     }
 
     public double satietyFromHunting(Animal prey) {
         return prey.actualWeight * 0.8;
     }
-
 
     public boolean isPredator() {
         return this.ration.equals("predators");
@@ -119,8 +101,8 @@ public abstract class Animal {
         return this.ration.equals("omnivore");
     }
 
-    public synchronized void move(Cell cell) {
-        if (this.actualSatiety == this.maxSatiety) {
+    public void move(Cell cell) {
+        if (this.actualSatiety == this.maxSatiety*0.7) {
             List<Coordinate> moveDirections = chooseDirection((cell));
             if (!(moveDirections.isEmpty())) {
                 Coordinate newCoordinate = moveDirections.get(ThreadLocalRandom.current().nextInt(moveDirections.size()));
@@ -138,7 +120,6 @@ public abstract class Animal {
     public double fatigueMovement() {
         return this.initWeight * 0.05;
     }
-
 
     public List<Coordinate> chooseDirection(Cell cell) {
         List<Coordinate> moveDirections = new ArrayList<>();
@@ -160,20 +141,16 @@ public abstract class Animal {
         return coordinate.getX() >= 0 && coordinate.getX() < Setting.NUMBER_OF_ROWS && coordinate.getY() >= 0 && coordinate.getY() < Setting.NUMBER_OF_COLUMNS;
     }
 
-    public void die(Cell cell) {
-        cell.removeAnimalFromCell(this);
-    }
-
-    public Double getProbability(Animal predator, Animal prey) {
-        return PredatorPreyProbability.getPredatorPreyMatrix().getOrDefault(predator.getClass().getSimpleName(), new HashMap<>()).getOrDefault(prey.getClass().getSimpleName(), 0.0);
-    }
-
     public void checkForDie(Cell cell) {
         if (this.actualWeight < this.initWeight / 2 ||
                 this.actualSatiety < this.maxSatiety * 0.2 ||
                 this.actualSatiety < this.maxSatiety * 0.5 && ThreadLocalRandom.current().nextDouble() < 0.5) {
             this.die(cell);
         }
+    }
+
+    public void die(Cell cell) {
+        cell.removeAnimalFromCell(this);
     }
 
 }

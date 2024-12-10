@@ -1,8 +1,16 @@
 package entity;
 
+import island.Coordinate;
+import lombok.Getter;
+import lombok.Setter;
 import setting.Setting;
 
 public class Plant {
+
+    @Setter
+    @Getter
+    Coordinate coordinate;
+
     public Plant() {
     }
 

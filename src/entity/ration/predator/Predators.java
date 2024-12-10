@@ -10,7 +10,7 @@ public class Predators extends Animal {
     public Predators() {
         super();
     }
-
+    @Override
     public void eat(Cell cell) {
         if (this.isPredator()) {
             int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
