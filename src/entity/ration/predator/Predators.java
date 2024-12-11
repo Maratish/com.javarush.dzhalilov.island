@@ -25,6 +25,7 @@ public class Predators extends Animal {
                             Math.min(this.getMaxSatiety(),
                                     this.getActualSatiety()+this.satietyFromHunting(prey)-this.huntingCost())));
                     checkForDie(cell);
+//                    System.out.println(this.getClass().getSimpleName()+" съел "+ prey.getClass().getSimpleName()+" в ячейке "+cell.getCoordinate());
                 } else {
                     die(cell);
                 }

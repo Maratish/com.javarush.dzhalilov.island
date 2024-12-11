@@ -60,14 +60,15 @@ public abstract class Animal {
                     sexCostAndCheckDeath(this, cell);
                     sexCostAndCheckDeath(animal, cell);
                     try {
-                        cell.addAnimal(this.getClass().getConstructor().newInstance());
+                        Animal newAnimal =this.getClass().getConstructor().newInstance();
+                        cell.addAnimal(newAnimal);
+//            System.out.println("родился "+newAnimal.getClass().getSimpleName());
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                              NoSuchMethodException e) {
                         throw new RuntimeException("ошибка спаривания " + e);
                     }
                 }
             }
-
         }
     }
 
@@ -102,7 +103,7 @@ public abstract class Animal {
     }
 
     public void move(Cell cell) {
-        if (this.actualSatiety == this.maxSatiety*0.7) {
+
             List<Coordinate> moveDirections = chooseDirection((cell));
             if (!(moveDirections.isEmpty())) {
                 Coordinate newCoordinate = moveDirections.get(ThreadLocalRandom.current().nextInt(moveDirections.size()));
@@ -111,14 +112,17 @@ public abstract class Animal {
                     cell.removeAnimalFromCell(this);
                     this.setCoordinate(newCoordinate);
                     actualSatiety = actualSatiety - fatigueMovement();
-
+                    this.checkForDie(cell);
                 }
             }
+//            System.out.println(this.getClass().getSimpleName()+" переместился из "+cell.getCoordinate()+" в "+this.getCoordinate());
         }
-    }
 
     public double fatigueMovement() {
-        return this.initWeight * 0.05;
+        if (this.actualSatiety<this.maxSatiety*0.5){
+            this.actualWeight-=this.initWeight*0.2;
+        }
+        return this.initWeight;
     }
 
     public List<Coordinate> chooseDirection(Cell cell) {
@@ -148,6 +152,7 @@ public abstract class Animal {
     }
 
     public void die(Cell cell) {
+//        System.out.println(this.getClass().getSimpleName()+" умер");
         cell.removeAnimalFromCell(this);
     }
 

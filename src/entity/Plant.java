@@ -22,7 +22,7 @@ public class Plant {
 
     public void growthPlants() {
         if (weight < 200) {
-            weight += Math.min(weight * 0.01, MAX_PLANTS_PER_CELL - weight);
+            weight += Math.min(MAX_PLANTS_PER_CELL * 0.001, MAX_PLANTS_PER_CELL - weight);
         }
     }
 
