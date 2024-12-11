@@ -10,5 +10,9 @@ public class Boar extends Omnivore {
         super();
     }
 
+    @Override
+    public String toString() {
+        return "\uD83D\uDC17";
+    }
 }
 

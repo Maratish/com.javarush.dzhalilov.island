@@ -10,9 +10,6 @@ import java.util.concurrent.*;
 public class Island {
     @Getter
     final public static ConcurrentHashMap<Coordinate, Cell> ISLAND_MAP = new ConcurrentHashMap<>();
-    private final ScheduledExecutorService schedul = Executors.newSingleThreadScheduledExecutor();
-    private final CountDownLatch simulationStepLatch = new CountDownLatch(0);
-        ExecutorService executorService = Executors.newFixedThreadPool(6);
 
     public Island() {
         islandInit();
@@ -31,11 +28,9 @@ public class Island {
             for (int j = 0; j < Setting.NUMBER_OF_COLUMNS; j++) {
                 final int row = i;
                 final int column = j;
-                executorService.execute(() -> {
-                    Coordinate coordinate = new Coordinate(row, column);
-                    ISLAND_MAP.put(coordinate, new Cell(coordinate));
-                    initLatch.countDown();
-                });
+                Coordinate coordinate = new Coordinate(row, column);
+                ISLAND_MAP.put(coordinate, new Cell(coordinate));
+                initLatch.countDown();
             }
         }
         try {
@@ -43,21 +38,5 @@ public class Island {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Все клетки инициализированы");
-
-        schedul.scheduleAtFixedRate(this::runSimulation, 1, 1, TimeUnit.SECONDS);
-
-    }
-
-    private void runSimulation() {
-        CountDownLatch animalMove = new CountDownLatch(ISLAND_MAP.size());
-        for (Cell cell : ISLAND_MAP.values()) {
-            executorService.execute(() -> {
-                cell.run();
-                animalMove.countDown();
-            });
-        }
-                System.out.println(getTotalAnimalCount());
-        System.out.println("Спаривание завершено и перемещение завершено ");
     }
 }

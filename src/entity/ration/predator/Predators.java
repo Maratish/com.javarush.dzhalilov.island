@@ -12,6 +12,7 @@ public class Predators extends Animal {
     }
     @Override
     public void eat(Cell cell) {
+        cell.getLock().lock();
         if (this.isPredator()) {
             int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
             Animal prey = cell.getAnimalsOnCell().get(randomPrey);
@@ -20,7 +21,9 @@ public class Predators extends Animal {
             if (random < probabilityOfEat) {
                 if (this.getActualSatiety() > huntingCost()) {
                     cell.removeAnimalFromCell(prey);
-                    this.setActualSatiety(this.getActualSatiety() + this.satietyFromHunting(prey) - huntingCost());
+                    this.setActualSatiety(Math.max(0,
+                            Math.min(this.getMaxSatiety(),
+                                    this.getActualSatiety()+this.satietyFromHunting(prey)-this.huntingCost())));
                     checkForDie(cell);
                 } else {
                     die(cell);
@@ -30,5 +33,6 @@ public class Predators extends Animal {
                 checkForDie(cell);
             }
         }
+        cell.getLock().unlock();
     }
 }

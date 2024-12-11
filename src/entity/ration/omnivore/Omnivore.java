@@ -12,6 +12,7 @@ public class Omnivore extends Animal {
     }
     @Override
     public void eat(Cell cell) {
+        cell.getLock().lock();
         if (this.isOmnivore()) {
             int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
             Animal prey = cell.getAnimalsOnCell().get(randomPrey);
@@ -30,5 +31,6 @@ public class Omnivore extends Animal {
                 checkForDie(cell);
             }
         }
+        cell.getLock().unlock();
     }
 }

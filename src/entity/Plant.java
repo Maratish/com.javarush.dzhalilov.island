@@ -11,21 +11,24 @@ public class Plant {
     @Getter
     Coordinate coordinate;
 
+
+    public static final int MAX_PLANTS_PER_CELL = 200;
+    public static final double PLANT_GROWTH_PER_CYCLE = 0.1;
+    @Getter @Setter
+    private double weight;
+
     public Plant() {
     }
 
-    public static final double PLANT_MAX_WEIGHT_PER_UNIT = Setting.PLANT_MAX_WEIGHT_PER_UNIT;
-    public static final int MAX_PLANTS_PER_CELL = Setting.MAX_PLANTS_PER_CELL;
-    public static final double PLANT_GROWTH_PER_CYCLE = Setting.PLANT_GROWTH_PER_CYCLE;
-    private double weight;
-
-    public void grow() {
-        weight += PLANT_GROWTH_PER_CYCLE;
+    public void growthPlants() {
+        if (weight < 200) {
+            weight += Math.min(weight * 0.01, MAX_PLANTS_PER_CELL - weight);
+        }
     }
 
-    public void reduceWeight(double amount) {
-        weight = Math.max(weight - amount, 0);
+    public void reducePlantsWeight ( double reducedWeight){
+        weight = Math.max(0,weight-reducedWeight);
+        }
     }
-}
 
 

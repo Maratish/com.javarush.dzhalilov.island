@@ -5,21 +5,22 @@ import entity.Plant;
 import lombok.Data;
 import lombok.Getter;
 import setting.AnimalFactory;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Data
 public class Cell implements Runnable {
     Coordinate coordinate;
     @Getter
-    private final CopyOnWriteArrayList<Animal> animalsOnCell = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<Plant> plantsOnCell = new CopyOnWriteArrayList<>();
-    public final ConcurrentHashMap<Class<? extends Animal>, Integer> typeOfAnimalOnCell = new ConcurrentHashMap<>();
+    private final List<Animal> animalsOnCell = new CopyOnWriteArrayList<>();
+    @Getter
+    private final ReentrantLock lock = new ReentrantLock();
+    @Getter
+    private final Plant plantOnCell = new Plant();
 
     public Cell(Coordinate coordinate) {
         this.coordinate = coordinate;
@@ -27,7 +28,6 @@ public class Cell implements Runnable {
         populatePlantsOnCell();
 
     }
-
     public void populateAnimalOnCell() {
         for (Animal animal : AnimalFactory.getAllAnimalList()) {
             double maxOnCell = animal.getMaxPerCell();
@@ -45,12 +45,17 @@ public class Cell implements Runnable {
     }
 
     public boolean addAnimal(Animal animal) {
-        if (countSameTypeOnCell(animal) < animal.getMaxPerCell()) {
-            animalsOnCell.add(animal);
-            animal.setCoordinate(coordinate);
-            return true;
-        } else {
-            return false;
+        lock.lock();
+        try {
+            if (countSameTypeOnCell(animal.getClass()) < animal.getMaxPerCell()) {
+                animalsOnCell.add(animal);
+                animal.setCoordinate(coordinate);
+                return true;
+            } else {
+                return false;
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -60,53 +65,45 @@ public class Cell implements Runnable {
 
 
     public void removeAnimalFromCell(Animal animal) {
+        lock.lock();
         animalsOnCell.remove(animal);
+        lock.unlock();
     }
 
     public void populatePlantsOnCell() {
-        for (int i = 0; i < Plant.MAX_PLANTS_PER_CELL * 0.4; i++) {
-            plantsOnCell.add(new Plant());
-        }
+        plantOnCell.setWeight(Plant.MAX_PLANTS_PER_CELL*0.4);
     }
 
-    public long countSameTypeOnCell(Animal animal) {
+    public long countSameTypeOnCell(Class<? extends Animal> animal) {
         return animalsOnCell.stream()
-                .filter(e -> animal.getClass().isInstance(e))
+                .filter(e -> animal.isInstance(e))
                 .count();
     }
 
-    public void growthPlant(Plant plant) {
-        int currentPlantCount = plantsOnCell.size();
-        if (currentPlantCount < 100) {
-            int plantsToAdd = ThreadLocalRandom.current().nextInt(20);
-            plantsToAdd = Math.min(plantsToAdd, 100 - currentPlantCount);
-            for (int i = 0; i < plantsToAdd; i++) {
-                plantsOnCell.add(new Plant());
+
+
+
+        @Override
+        public void run () {
+            List<Animal> animalOnCellCopy = new ArrayList<>(animalsOnCell);
+            for (Animal animal : animalOnCellCopy) {
+                animal.tryToSex(this);
+                animal.move(this);
+                animal.eat(this);
+                plantOnCell.growthPlants();
             }
         }
-    }
 
-
-    @Override
-    public void run() {
-        List<Animal> animalOnCellCopy = new ArrayList<>(animalsOnCell);
-        for (Animal animal : animalOnCellCopy) {
-            animal.tryToSex(this);
-            animal.move(this);
-            animal.eat(this);
+        public int getXcoordynate () {
+            return this.getCoordinate().getX();
         }
+
+        public int getYcoordynate () {
+            return this.getCoordinate().getY();
+        }
+
+
     }
-
-    public int getXcoordynate() {
-        return this.getCoordinate().getX();
-    }
-
-    public int getYcoordynate() {
-        return this.getCoordinate().getY();
-    }
-
-
-}
 
 
 

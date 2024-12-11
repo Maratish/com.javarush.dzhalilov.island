@@ -82,7 +82,7 @@ public abstract class Animal {
 
     public abstract void eat(Cell cell);
     public double huntingCost() {
-        return this.actualWeight * 0.1;
+        return this.actualWeight * 0.01;
     }
 
     public Double getProbability(Animal predator, Animal prey) {
@@ -90,7 +90,7 @@ public abstract class Animal {
     }
 
     public double satietyFromHunting(Animal prey) {
-        return prey.actualWeight * 0.8;
+        return prey.actualWeight;
     }
 
     public boolean isPredator() {
@@ -142,9 +142,7 @@ public abstract class Animal {
     }
 
     public void checkForDie(Cell cell) {
-        if (this.actualWeight < this.initWeight / 2 ||
-                this.actualSatiety < this.maxSatiety * 0.2 ||
-                this.actualSatiety < this.maxSatiety * 0.5 && ThreadLocalRandom.current().nextDouble() < 0.5) {
+        if (this.actualWeight < this.initWeight * 0.5 || this.actualSatiety < this.maxSatiety * 0.3) {
             this.die(cell);
         }
     }
