@@ -20,8 +20,6 @@ public class Cell implements Runnable {
     @Getter
     private final List<Animal> animalsOnCell = new ArrayList<>();
     private final Plant plantOnCell = new Plant();
-    private final List<Animal> animalsToRemove = new ArrayList<>();
-    private final List<Animal> animalsToAdd = new ArrayList<>();
 
     public Cell(Coordinate coordinate) {
         this.coordinate = coordinate;
@@ -51,35 +49,21 @@ public class Cell implements Runnable {
     }
 
     public void addAnimal(Animal animal) {
+        Island.getIslandInstance().islandLock.lock();
         try {
-            Island.getIslandInstance().getIslandLock().lock();
-            animalsToAdd.add(animal);
-        } catch (Exception e) {
-            throw new RuntimeException("ошибка добавления животного " + e);
+            animalsOnCell.add(animal);
         } finally {
-            Island.getIslandInstance().getIslandLock().unlock();
-        }
-    }
-
-
-    public int countOfAllAnimalsOnCell() {
-        Island.getIslandInstance().getIslandLock().lock();
-        try {
-            return animalsOnCell.size();
-        } catch (Exception e) {
-            throw new RuntimeException("ошибка подсчета животных в клетке " + e);
-        } finally {
-            Island.getIslandInstance().getIslandLock().unlock();
+            Island.getIslandInstance().islandLock.unlock();
         }
     }
 
 
     public boolean removeAnimalFromCell(Animal animal) {
-        Island.getIslandInstance().getIslandLock().lock();
+        Island.getIslandInstance().islandLock.lock();
         try {
-            return animalsToRemove.add(animal);
+            return animalsOnCell.remove(animal);
         } finally {
-            Island.getIslandInstance().getIslandLock().unlock();
+            Island.getIslandInstance().islandLock.unlock();
         }
     }
 
@@ -88,52 +72,40 @@ public class Cell implements Runnable {
     }
 
     public long countSameTypeOnCell(Class<? extends Animal> animal) {
-        Island.getIslandInstance().getIslandLock().lock();
+        Island.getIslandInstance().islandLock.lock();
         try {
-            return animalsOnCell.stream()
+          return  animalsOnCell.stream()
                     .filter(e -> animal.isInstance(e))
                     .count();
+        }finally {
+            Island.getIslandInstance().islandLock.unlock();
+        }
+    }
+
+    public int countOfAllAnimalsOnCell() {
+        Island.getIslandInstance().islandLock.lock();
+        try {
+            return animalsOnCell.size();
         } finally {
-            Island.getIslandInstance().getIslandLock().unlock();
+            Island.getIslandInstance().islandLock.unlock();
         }
-    }
-
-
-    public void removeDiedAnimal() {
-        Island.getIslandInstance().getIslandLock().lock();
-        for (Animal a : animalsToRemove) {
-            if (animalsOnCell.contains(a)) {
-                animalsOnCell.remove(a);
-            }
-        }
-        Island.getIslandInstance().getIslandLock().unlock();
-    }
-
-    public void addBornedAnimal() {
-        Island.getIslandInstance().getIslandLock().lock();
-        for (Animal a : animalsToAdd) {
-            animalsOnCell.add(a);
-        }
-        Island.getIslandInstance().getIslandLock().unlock();
     }
 
 
     @Override
     public void run() {
-        List<Animal> currentAnimals = new ArrayList<>(animalsOnCell);
-        for (Animal animal : currentAnimals) {
-            animal.tryToSex(this);
-            animal.move(this);
-            animal.eat(this);
-            reduceWeightPerDay(animal);
-            animal.fatigueMovement();
-            animal.checkForDie(this);
-        }
-        addBornedAnimal();
-        animalsToAdd.clear();
-        removeDiedAnimal();
-        animalsToRemove.clear();
-        plantOnCell.growthPlants();
+
+            List<Animal> animalsOnCellCopy = new ArrayList<>(animalsOnCell);
+            for (Animal animal : animalsOnCellCopy) {
+                animal.tryToSex(this);
+                animal.move(this);
+                animal.eat(this);
+                reduceWeightPerDay(animal);
+                animal.fatigueMovement();
+                animal.checkForDie(this);
+            }
+            plantOnCell.growthPlants();
+
     }
 
     public int getXcoordynate() {
@@ -145,7 +117,7 @@ public class Cell implements Runnable {
     }
 
     public void reduceWeightPerDay(Animal animal) {
-        animal.setActualSatiety(animal.getActualSatiety() - animal.getMaxSatiety() * 0.05);
+        animal.setActualSatiety(animal.getActualSatiety() - animal.getMaxSatiety() * 0.15);
         if (animal.getActualSatiety() < 0) {
             animal.die(this);
         }

@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args)  {
         AnimalFactory.initializeAnimalCharTable();
         AnimalFactory.createAnimal(YamlReader.animalCharInit(Setting.PATH_OF_ANIMAL_CHAR));
-
+        Island.getIslandInstance();
         Simulation simulation= new Simulation();
         simulation.run();
 

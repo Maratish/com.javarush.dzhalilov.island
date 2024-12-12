@@ -2,6 +2,7 @@ package entity.ration.omnivore;
 
 import entity.Animal;
 import island.Cell;
+import island.Island;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -10,6 +11,7 @@ public class Omnivore extends Animal {
     public Omnivore() {
         super();
     }
+
     @Override
     public void eat(Cell cell) {
         this.checkForDie(cell);

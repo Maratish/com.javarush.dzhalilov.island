@@ -40,9 +40,15 @@ public class Simulation implements Runnable {
                 }
             });
         }
+        try {
+            animalMove.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         simulationOutput();
         day++;
     }
+
 
     private void simulationOutput() {
         System.out.println("ДЕНЬ №" + day);
@@ -57,7 +63,8 @@ public class Simulation implements Runnable {
             Animal animal = null;
             try {
                 animal = animalType.getDeclaredConstructor().newInstance();
-            } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+            } catch (InstantiationException | InvocationTargetException | IllegalAccessException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
             String animalRepresentation = (animal != null) ? animal.toString() : "?";

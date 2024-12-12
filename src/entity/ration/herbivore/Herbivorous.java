@@ -2,6 +2,7 @@ package entity.ration.herbivore;
 
 import entity.Animal;
 import island.Cell;
+import island.Island;
 
 public class Herbivorous extends Animal {
     public Herbivorous() {
@@ -10,6 +11,7 @@ public class Herbivorous extends Animal {
 
     @Override
     public void eat(Cell cell) {
+
         this.checkForDie(cell);
         if (cell.getPlantOnCell().getWeight() > 0) {
             if (getActualSatiety() < getMaxSatiety() * 0.75) {
