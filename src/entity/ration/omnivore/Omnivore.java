@@ -12,7 +12,7 @@ public class Omnivore extends Animal {
     }
     @Override
     public void eat(Cell cell) {
-        cell.getLock().lock();
+        this.checkForDie(cell);
         if (this.isOmnivore()) {
             int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
             Animal prey = cell.getAnimalsOnCell().get(randomPrey);
@@ -20,8 +20,8 @@ public class Omnivore extends Animal {
             Double random = ThreadLocalRandom.current().nextDouble();
             if (random < probabilityOfEat) {
                 if (this.getActualSatiety() > huntingCost()) {
-                    cell.removeAnimalFromCell(prey);
-                    this.setActualSatiety(this.getActualSatiety() + this.satietyFromHunting(prey) - huntingCost());
+                    prey.die(cell);
+                    satietyFromHunting(prey);
                     checkForDie(cell);
                 } else {
                     die(cell);
@@ -31,6 +31,5 @@ public class Omnivore extends Animal {
                 checkForDie(cell);
             }
         }
-        cell.getLock().unlock();
     }
 }

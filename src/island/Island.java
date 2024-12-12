@@ -34,7 +34,7 @@ public class Island {
             }
         }
         try {
-            initLatch.await();
+            initLatch.await(5,TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

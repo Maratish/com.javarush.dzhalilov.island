@@ -10,7 +10,7 @@ public class Herbivorous extends Animal {
 
     @Override
     public void eat(Cell cell) {
-        cell.getLock().lock();
+        this.checkForDie(cell);
         if (cell.getPlantOnCell().getWeight() > 0) {
             if (getActualSatiety() < getMaxSatiety() * 0.75) {
                 double howFoodNeed = getMaxSatiety() - getActualSatiety();
@@ -21,7 +21,6 @@ public class Herbivorous extends Animal {
                 this.checkForDie(cell);
             }
         }
-    cell.getLock().unlock();
     }
 }
 
