@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Setting {
 
 
-    public static final double REPRODUCTION_PROBABILITY=0.000000000000000000000000000000000000000000000000001;
+    public static final double REPRODUCTION_PROBABILITY=0.05;
     public static final int PROCCESORS_CORE=Runtime.getRuntime().availableProcessors();
     public static final int NUMBER_OF_ROWS = 10;
     public static final int NUMBER_OF_COLUMNS=10;

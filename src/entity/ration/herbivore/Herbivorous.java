@@ -18,6 +18,7 @@ public class Herbivorous extends Animal {
                 double howPlantsCanEat = Math.min(plantsWeight, howFoodNeed);
                 setActualSatiety(getActualSatiety() + howPlantsCanEat);
                 cell.getPlantOnCell().reducePlantsWeight(howPlantsCanEat);
+                this.checkForDie(cell);
             }
         }
     cell.getLock().unlock();

@@ -59,6 +59,7 @@ public abstract class Animal {
                     animal.virginity = false;
                     sexCostAndCheckDeath(this, cell);
                     sexCostAndCheckDeath(animal, cell);
+                    checkForDie(cell);
                     try {
                         Animal newAnimal =this.getClass().getConstructor().newInstance();
                         cell.addAnimal(newAnimal);
@@ -115,7 +116,7 @@ public abstract class Animal {
                     this.checkForDie(cell);
                 }
             }
-//            System.out.println(this.getClass().getSimpleName()+" переместился из "+cell.getCoordinate()+" в "+this.getCoordinate());
+            System.out.println(this.getClass().getSimpleName()+" переместился из "+cell.getCoordinate()+" в "+this.getCoordinate());
         }
 
     public double fatigueMovement() {
