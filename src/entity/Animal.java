@@ -59,6 +59,7 @@ public abstract class Animal {
                         try {
                             Animal newAnimal = this.getClass().getConstructor().newInstance();
                             cell.addAnimal(newAnimal);
+
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                                  NoSuchMethodException e) {
                             throw new RuntimeException("ошибка спаривания " + e);
@@ -86,8 +87,7 @@ public abstract class Animal {
     }
 
     public void satietyFromHunting(Animal prey) {
-        this.setActualSatiety(Math.min(0,
-                Math.min(this.maxSatiety, this.actualSatiety + prey.actualWeight - huntingCost())));
+        this.setActualSatiety(Math.min(this.maxSatiety, this.actualSatiety + prey.actualWeight - huntingCost()));
     }
 
     public boolean isPredator() {
@@ -104,55 +104,54 @@ public abstract class Animal {
             Coordinate newCoordinate = moveDirections.get(ThreadLocalRandom.current().nextInt(moveDirections.size()));
             Cell newCell = Island.getISLAND_MAP().get(newCoordinate);
             if (newCoordinate != null && !(cell.countSameTypeOnCell(this.getClass()) >= this.getMaxPerCell())) {
-//                newCell.addAnimal(this);
-                this.die(cell);
-                actualSatiety = actualSatiety - fatigueMovement();
+                newCell.addAnimal(this);
+                cell.removeAnimalFromCell(this);
+                this.actualSatiety = actualSatiety - fatigueMovement();
                 this.checkForDie(cell);
             }
         }
     }
 
-    public double fatigueMovement() {
-        this.actualSatiety -= this.maxSatiety * 0.1;
-        if (this.actualSatiety < this.maxSatiety * 0.5) {
-            this.actualWeight -= this.initWeight * 0.2;
-        }
-        return this.actualSatiety;
+public double fatigueMovement() {
+    this.actualSatiety -= this.maxSatiety * 0.1;
+    if (this.actualSatiety < this.maxSatiety * 0.5) {
+        this.actualWeight -= this.initWeight * 0.1;
     }
+    return this.actualSatiety;
+}
 
-    public List<Coordinate> chooseDirection(Cell cell) {
-        List<Coordinate> moveDirections = new ArrayList<>();
-        if (cell != null && cell.getAnimalsOnCell().size() > 0) {
-            for (int i = -maxSpeed; i <= maxSpeed; i++) {
-                for (int j = -maxSpeed; j <= maxSpeed; j++) {
-                    if (i == 0 && j == 0) {
-                        continue;
-                    }
-                    Coordinate coordinate = new Coordinate(cell.getXcoordynate() + i, cell.getYcoordynate() + j);
-                    System.out.println(isValidCoordinate(coordinate));
-                    if (isValidCoordinate(coordinate)&&(!(cell.countSameTypeOnCell(this.getClass()) >= this.getMaxPerCell()))) {
-                        moveDirections.add(coordinate);
-                    }
+public List<Coordinate> chooseDirection(Cell cell) {
+    List<Coordinate> moveDirections = new ArrayList<>();
+    if (cell != null && cell.getAnimalsOnCell().size() > 0) {
+        for (int i = -maxSpeed; i <= maxSpeed; i++) {
+            for (int j = -maxSpeed; j <= maxSpeed; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                Coordinate coordinate = new Coordinate(cell.getXcoordynate() + i, cell.getYcoordynate() + j);
+                if (isValidCoordinate(coordinate) && (!(cell.countSameTypeOnCell(this.getClass()) >= this.getMaxPerCell()))) {
+                    moveDirections.add(coordinate);
                 }
             }
         }
-        return moveDirections;
     }
+    return moveDirections;
+}
 
 
-    public boolean isValidCoordinate(Coordinate coordinate) {
-        return coordinate.getX() >= 0 && coordinate.getX() < Setting.NUMBER_OF_ROWS &&
-                coordinate.getY() >= 0 && coordinate.getY() < Setting.NUMBER_OF_COLUMNS;
-    }
+public boolean isValidCoordinate(Coordinate coordinate) {
+    return coordinate.getX() >= 0 && coordinate.getX() < Setting.NUMBER_OF_ROWS &&
+            coordinate.getY() >= 0 && coordinate.getY() < Setting.NUMBER_OF_COLUMNS;
+}
 
-    public void checkForDie(Cell cell) {
-        if (this.actualWeight < this.initWeight * 0.5 || this.actualSatiety < this.maxSatiety * 0.3) {
-            this.die(cell);
-        }
+public void checkForDie(Cell cell) {
+    if (this.actualWeight < this.initWeight * 0.5 || this.actualSatiety < this.maxSatiety * 0.3) {
+        this.die(cell);
     }
+}
 
-    public void die(Cell cell) {
-        cell.getAnimalsToRemove().add(this);
-    }
+public void die(Cell cell) {
+    cell.getAnimalsToRemove().add(this);
+}
 
 }

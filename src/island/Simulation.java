@@ -8,7 +8,6 @@ import setting.Setting;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -27,7 +26,7 @@ public class Simulation implements Runnable {
     }
 
     public void run() {
-        scheduler.scheduleAtFixedRate(this::simulationStep, 50, 50, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::simulationStep, 100, 100, TimeUnit.MILLISECONDS);
     }
 
     private void simulationStep() {
@@ -41,23 +40,31 @@ public class Simulation implements Runnable {
                 }
             });
         }
-        try {
-            animalMove.await();
-            simulationOutput();
-            day++;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Симуляция прервана: " + e.getMessage());
-        }
+        simulationOutput();
+        day++;
     }
 
-    private void simulationOutput(){
-        System.out.println(day);
-        int animalCount=0;
-        for (Cell value : island.getISLAND_MAP().values()) {
-            animalCount+=value.getAnimalsOnCell().size();
-        }
-        System.out.println(animalCount);
+    private void simulationOutput() {
+        System.out.println("ДЕНЬ №" + day);
+        System.out.println("Всего на острове - " + island.getTotalAnimalCount());
+        System.out.println("Хищники: " + island.getCountOfPredators() + " Травоядные: " + island.getCountOfHerbivorous());
 
+        Map<Class<? extends Animal>, Integer> animalCounts = island.getAnimalCountsOnCell();
+
+        StringBuilder animalSummary = new StringBuilder();
+        for (Class<? extends Animal> animalType : animalTypes) {
+            Integer count = animalCounts.get(animalType);
+            Animal animal = null;
+            try {
+                animal = animalType.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+            String animalRepresentation = (animal != null) ? animal.toString() : "?";
+            animalSummary.append(animalRepresentation).append(count != null ? count : 0).append("  ");
+        }
+        animalSummary.append("🍀").append(island.getTotalPlantWeight());
+        System.out.println(animalSummary);
     }
+
 }

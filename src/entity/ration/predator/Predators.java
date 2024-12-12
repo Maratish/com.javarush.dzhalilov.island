@@ -3,6 +3,7 @@ package entity.ration.predator;
 
 import entity.Animal;
 import island.Cell;
+import island.Island;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -10,9 +11,10 @@ public class Predators extends Animal {
     public Predators() {
         super();
     }
+
     @Override
     public void eat(Cell cell) {
-
+        Island.getIslandInstance().getIslandLock().lock();
         this.checkForDie(cell);
         if (this.isPredator()) {
             int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
@@ -21,10 +23,10 @@ public class Predators extends Animal {
             Double random = ThreadLocalRandom.current().nextDouble();
             if (random < probabilityOfEat) {
                 if (this.getActualSatiety() > huntingCost()) {
-                    prey.die(cell);
+                    cell.removeAnimalFromCell(prey);
+                    cell.getAnimalsOnCell().contains(prey);
                     satietyFromHunting(prey);
                     checkForDie(cell);
-//                    System.out.println(this.getClass().getSimpleName()+" съел "+ prey.getClass().getSimpleName()+" в ячейке "+cell.getCoordinate());
                 } else {
                     die(cell);
                 }
@@ -33,5 +35,6 @@ public class Predators extends Animal {
                 checkForDie(cell);
             }
         }
+        Island.getIslandInstance().getIslandLock().unlock();
     }
 }
