@@ -3,8 +3,8 @@ package entity.ration.predator;
 
     import entity.Animal;
     import island.Cell;
-    import island.Island;
 
+    import java.util.List;
     import java.util.concurrent.ThreadLocalRandom;
 
     public class Predators extends Animal {
@@ -14,25 +14,20 @@ package entity.ration.predator;
 
         @Override
         public void eat(Cell cell) {
-            this.checkForDie(cell);
-            if (this.isPredator()) {
-                int randomPrey = ThreadLocalRandom.current().nextInt(cell.getAnimalsOnCell().size());
-                Animal prey = cell.getAnimalsOnCell().get(randomPrey);
-                double probabilityOfEat = getProbability(this, prey);
-                Double random = ThreadLocalRandom.current().nextDouble();
-                if (random < probabilityOfEat) {
-                    if (this.getActualSatiety() > huntingCost()) {
-                        cell.removeAnimalFromCell(prey);
-                        cell.getAnimalsOnCell().contains(prey);
-                        satietyFromHunting(prey);
-                        checkForDie(cell);
+            List<Animal> animalsOnCellCopy = cell.getAnimalsOnCell();
+            if (!(animalsOnCellCopy.isEmpty())) {
+                if (this.isPredator()) {
+                    int randomPrey = ThreadLocalRandom.current().nextInt(animalsOnCellCopy.size());
+                    Animal prey = animalsOnCellCopy.get(randomPrey);
+                    double probabilityOfEat = getProbabilityOfEat(this, prey);
+                    Double random = ThreadLocalRandom.current().nextDouble();
+                    if (random < probabilityOfEat) {
+                            satietyFromHunting(prey);
+                            cell.removeAnimalFromCell(prey);
+                        }
                     } else {
-                        die(cell);
+                        this.setActualSatiety(this.getActualSatiety() - this.getInitWeight()*0.01);
                     }
-                } else {
-                    this.setActualSatiety(this.getActualSatiety() - this.huntingCost());
-                    checkForDie(cell);
                 }
             }
         }
-    }

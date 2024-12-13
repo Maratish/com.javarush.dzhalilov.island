@@ -4,89 +4,89 @@ Predator:
     weight: 50.0
     maxPerCell: 30
     maxSpeed: 3
-    foodNeeded: 8.0
+    maxSatiety: 8.0
 
   Boa:
     weight: 15.0
     maxPerCell: 30
     maxSpeed: 1
-    foodNeeded: 3.0
+    maxSatiety: 3.0
 
   Fox:
     weight: 8.0
     maxPerCell: 30
     maxSpeed: 2
-    foodNeeded: 2.0
+    maxSatiety: 2.0
 
   Bear:
     weight: 500.0
     maxPerCell: 5
     maxSpeed: 2
-    foodNeeded: 80.0
+    maxSatiety: 80.0
 
   Eagle:
     weight: 6.0
     maxPerCell: 20
     maxSpeed: 3
-    foodNeeded: 1.0
+    maxSatiety: 1.0
 Herbivore:
   Horse:
     weight: 400.0
     maxPerCell: 20
     maxSpeed: 4
-    foodNeeded: 60.0
+    maxSatiety: 60.0
 
   Deer:
     weight: 300.0
     maxPerCell: 20
     maxSpeed: 4
-    foodNeeded: 50.0
+    maxSatiety: 50.0
 
   Rabbit:
     weight: 2.0
     maxPerCell: 150
     maxSpeed: 2
-    foodNeeded: 0.45
+    maxSatiety: 0.45
 
   Mouse:
     weight: 0.05
     maxPerCell: 500
     maxSpeed: 1
-    foodNeeded: 0.01
+    maxSatiety: 0.01
 
   Goat:
     weight: 60.0
     maxPerCell: 140
     maxSpeed: 3
-    foodNeeded: 10.0
+    maxSatiety: 10.0
 
   Sheep:
     weight: 70.0
     maxPerCell: 140
     maxSpeed: 3
-    foodNeeded: 15.0
+    maxSatiety: 15.0
 
   Buffalo:
     weight: 700.0
     maxPerCell: 10
     maxSpeed: 3
-    foodNeeded: 100.0
+    maxSatiety: 100.0
 
   Duck:
     weight: 1.0
     maxPerCell: 200
     maxSpeed: 4
-    foodNeeded: 0.15
+    maxSatiety: 0.15
 
   Caterpillar:
     weight: 0.01
     maxPerCell: 1000
     maxSpeed: 0
-    foodNeeded: 0.0
+    maxSatiety: 0.0
 
 Omnivore:
   Boar:
     weight: 400.0
     maxPerCell: 50
     maxSpeed: 2
-    foodNeeded: 50.0
+    maxSatiety: 50.0

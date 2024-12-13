@@ -46,7 +46,7 @@ public class Island {
         return counts;
     }
 
-    public int getCountOfPredators() {
+    public int getTotalCountOfPredators() {
         int predatorCount = 0;
         for (Cell cell : Island.getISLAND_MAP().values()) {
             for (Animal animal : cell.getAnimalsOnCell()) {
@@ -58,7 +58,7 @@ public class Island {
         return predatorCount;
     }
 
-    public int getCountOfHerbivorous() {
+    public int getTotalCountOfHerbivorous() {
         int herbivoreCount = 0;
         for (Cell cell : Island.getISLAND_MAP().values()) {
             for (Animal animal : cell.getAnimalsOnCell()) {
@@ -84,6 +84,7 @@ public class Island {
                 final int column = j;
                 Coordinate coordinate = new Coordinate(row, column);
                 ISLAND_MAP.put(coordinate, new Cell(coordinate));
+                System.out.println("Создана клетка с координатами: " + coordinate);
                 initLatch.countDown();
             }
         }

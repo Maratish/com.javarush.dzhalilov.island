@@ -8,11 +8,8 @@ import setting.AnimalFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Data
 public class Cell implements Runnable {
@@ -48,7 +45,7 @@ public class Cell implements Runnable {
         return new ArrayList<>(animalsOnCell);
     }
 
-    public void addAnimal(Animal animal) {
+    public void addAnimalOnCell(Animal animal) {
         Island.getIslandInstance().islandLock.lock();
         try {
             animalsOnCell.add(animal);
@@ -97,12 +94,17 @@ public class Cell implements Runnable {
 
             List<Animal> animalsOnCellCopy = new ArrayList<>(animalsOnCell);
             for (Animal animal : animalsOnCellCopy) {
-                animal.tryToSex(this);
+                if (animal.checkForDie(this)){
+                    System.out.println(animal+" "+animal.getActualWeight());
+//                    System.out.println(animal+" "+animal.getActualWeight()+" вес "+animal.getActualSatiety()+" насыщение");
+                    this.removeAnimalFromCell(animal);
+                    continue;
+                }
+                animal.tryToReproduce(this);
                 animal.move(this);
                 animal.eat(this);
                 reduceWeightPerDay(animal);
-                animal.fatigueMovement();
-                animal.checkForDie(this);
+                animal.satietyReduceFromMovement();
             }
             plantOnCell.growthPlants();
 
@@ -117,7 +119,7 @@ public class Cell implements Runnable {
     }
 
     public void reduceWeightPerDay(Animal animal) {
-        animal.setActualSatiety(animal.getActualSatiety() - animal.getMaxSatiety() * 0.15);
+        animal.setActualSatiety(animal.getActualSatiety() - animal.getMaxSatiety() * 0.01);
         if (animal.getActualSatiety() < 0) {
             animal.die(this);
         }

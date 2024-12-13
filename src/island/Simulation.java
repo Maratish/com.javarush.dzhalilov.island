@@ -26,16 +26,22 @@ public class Simulation implements Runnable {
     }
 
     public void run() {
-        scheduler.scheduleAtFixedRate(this::simulationStep, 100, 100, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::simulationStep, 0, Setting.SCHEDULER_PERIOD_MS, TimeUnit.MILLISECONDS);
     }
 
     private void simulationStep() {
+        int islandSize = island.getISLAND_MAP().size();
+        System.out.println("размер карты = "+islandSize);
+        if (islandSize<=0) System.err.println("КАРТА ПУСТА ИЛИ ОТРИЦАТЕЛЬНА");
         CountDownLatch animalMove = new CountDownLatch(island.getISLAND_MAP().size());
         for (Cell cell : island.getISLAND_MAP().values()) {
-            simulationExecutor.submit(() -> {
+            simulationExecutor.execute(() -> {
                 try {
                     cell.run();
-                } finally {
+                } catch (Exception e){
+                    throw  new RuntimeException("АШИПКА"+e);
+                }
+                finally {
                     animalMove.countDown();
                 }
             });
@@ -53,7 +59,7 @@ public class Simulation implements Runnable {
     private void simulationOutput() {
         System.out.println("ДЕНЬ №" + day);
         System.out.println("Всего на острове - " + island.getTotalAnimalCount());
-        System.out.println("Хищники: " + island.getCountOfPredators() + " Травоядные: " + island.getCountOfHerbivorous());
+        System.out.println("Хищники: " + island.getTotalCountOfPredators() + " Травоядные: " + island.getTotalCountOfHerbivorous());
 
         Map<Class<? extends Animal>, Integer> animalCounts = island.getAnimalCountsOnCell();
 
